@@ -6,10 +6,13 @@ import logging
 import numpy as np
 from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister, execute
 from qiskit import quantum_info as qi
+"""
 from qiskit.ignis.verification.tomography import (
     TomographyFitter,
     state_tomography_circuits,
 )
+"""
+from qiskit_experiments.library import StateTomography
 from qiskit.providers.aer.backends.aerbackend import AerBackend
 from scipy import linalg
 from scipy.linalg import eig
@@ -98,7 +101,8 @@ def perform_quantum_tomography(
     classical_gates = co.remove_classical_operations(circuit)
     old_cregs = circuit.cregs.copy()
     circuit.cregs = []
-    tomography_circuits = state_tomography_circuits(circuit, [qubit_1, qubit_2])
+    #tomography_circuits = state_tomography_circuits(circuit, [qubit_1, qubit_2])
+    tomography_exp = StateTomography(circuit, measurement_indices=[qubit_1, qubit_2])
     circuit.cregs = old_cregs
     co.add_classical_operations(circuit, classical_gates)
 
@@ -106,11 +110,15 @@ def perform_quantum_tomography(
     if backend_options is None or not isinstance(backend, AerBackend):
         backend_options = {}
 
+    """
     result = [
         execute(qc, backend, **backend_options, **execute_kwargs).result()
         for qc in tomography_circuits
     ]
     rho = TomographyFitter(result, tomography_circuits).fit()
+    """
+    tomography_data = tomography_exp.run(backend, **backend_options, **execute_kwargs).block_for_results()
+    rho = tomography_data.analysis_results("state").value.data
     assert isinstance(rho, np.ndarray)
     return rho
 
