@@ -16,6 +16,8 @@ setup(
     long_description_content_type='text/markdown',
     install_requires=[
         "qiskit~=0.44.1",
+        "qiskit-experiments",
+        "qiskit-aer",
         "numpy",
         "scipy",
         "openfermion~=1.5",

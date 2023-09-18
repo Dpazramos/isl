@@ -1,5 +1,6 @@
 qiskit~=0.44.1
 qiskit-experiments
+qiskit-aer
 matplotlib~=3.5.1
 pandas~=1.4.2
 setuptools~=62.1.0
