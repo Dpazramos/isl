@@ -13,7 +13,7 @@ from qiskit.ignis.verification.tomography import (
 )
 """
 from qiskit_experiments.library import StateTomography
-from qiskit.providers.aer.backends.aerbackend import AerBackend
+from qiskit_aer.backends.aerbackend import AerBackend
 from scipy import linalg
 from scipy.linalg import eig
 
