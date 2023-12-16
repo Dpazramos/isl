@@ -1,3 +1,10 @@
+## Fork information
+
+The `qiskit-0441` branch of this fork has been edited to be minimally functional with Qiskit 0.44.1. The code has not been fully updated over to this version, so some functionality is almost certainly broken.
+
+To use this branch, clone the repository and do e.g. `pip install -e /path/to/dir/isl/`.
+
+---
 
 # Incremental Structure Learning (ISL)
 
