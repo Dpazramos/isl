@@ -417,6 +417,7 @@ class ISLRecompiler(ApproximateRecompiler):
         e_vals = self._measure_qubit_expectation_values()
         self.e_val_history.append(e_vals)
         ems = self._get_all_qubit_pair_entanglement_measures()
+        print("--------entanglement measures:", ems)
         self.entanglement_measures_history.append(ems)
         priorities = self._get_all_qubit_pair_priorities()
         e_val_sums = self._get_all_qubit_pair_e_val_sums(e_vals)

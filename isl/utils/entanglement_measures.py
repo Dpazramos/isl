@@ -92,18 +92,36 @@ def perform_quantum_tomography(
     :return:
     """
     execute_kwargs = {} if execute_kwargs is None else execute_kwargs
-    classical_gates = co.remove_classical_operations(circuit)
-    old_cregs = circuit.cregs.copy()
-    circuit.cregs = []
+    circuit_tomo = circuit.copy()
+    circuit_tomo.remove_final_measurements()
+    # print("circ. tomo:\n")
+    # print(circuit_tomo, "\n")
+    # classical_gates = co.remove_classical_operations(circuit)
+    # old_cregs = circuit.cregs.copy()
+    # circuit.cregs = []
     tomography_exp = StateTomography(circuit, measurement_indices=[qubit_1, qubit_2])
-    circuit.cregs = old_cregs
-    co.add_classical_operations(circuit, classical_gates)
+    # circuit.cregs = old_cregs
+    # co.add_classical_operations(circuit, classical_gates)
+
 
     # Backend options only supported for simulators
     if backend_options is None or not isinstance(backend, AerBackend):
         backend_options = {}
 
+    # Set the optimisation level to 3 for maximum results
+    execute_kwargs['optimization_level'] = 3
+    
+    print("backend_options:", backend_options)
+    # print("execute_kwargs:", execute_kwargs) # Typically, 'shots': ..., 'optimization_level': ....
+
     tomography_data = tomography_exp.run(backend, **backend_options, **execute_kwargs).block_for_results()
+
+    # try:
+    #     fidelity = tomography_data.analysis_results("state_fidelity").value
+    #     print("--------Fidelity:", fidelity)
+    # except Exception as e:
+    #     print("Error getting fidelity:", e)
+
     rho = tomography_data.analysis_results("state").value.data
     assert isinstance(rho, np.ndarray)
     return rho
@@ -268,7 +286,8 @@ def concurrence(rho):
     eigenvalues[np.isclose(eigenvalues, 0)] = 0
     lambdas = np.sqrt(eigenvalues)
     lambdas = np.sort(lambdas)[::-1]
-    return np.max([0, lambdas[0] - lambdas[1] - lambdas[2] - lambdas[3]])
+    concurrence = np.max([0, lambdas[0] - lambdas[1] - lambdas[2] - lambdas[3]])
+    return concurrence
 
 
 def negativity(rho):
