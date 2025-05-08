@@ -111,7 +111,7 @@ def perform_quantum_tomography(
     # Set the optimisation level to 3 for maximum results
     execute_kwargs['optimization_level'] = 3
     
-    print("backend_options:", backend_options)
+    # print("backend_options:", backend_options)
     # print("execute_kwargs:", execute_kwargs) # Typically, 'shots': ..., 'optimization_level': ....
 
     tomography_data = tomography_exp.run(backend, **backend_options, **execute_kwargs).block_for_results()
